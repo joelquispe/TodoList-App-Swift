@@ -12,12 +12,13 @@ struct HomeView: View {
     @State private var isNavigateAddTask = false
     @State private var filterTasks = [Task]()
     @StateObject private var taskViewModel = TaskViewModel()
+    @EnvironmentObject private var router: Router
     @Environment(\.dismiss) private var dismis
     func fillDataFilter(){
         self.filterTasks =  taskViewModel.tasks
     }
     var body: some View {
-        NavigationStack{
+        
             ZStack{
                 VStack{
                     TextField( text: $tfTextSearch,
@@ -33,7 +34,9 @@ struct HomeView: View {
                     List(self.filterTasks,id: \.id){
                         element in
                         HStack{
-                            NavigationLink(destination: FormTaskView(task: element), label: {
+                            Button(action: {
+                                self.router.navigate(to: .formTask(task: element))
+                            }, label: {
                                 VStack(alignment: .leading){
                                     Text(element.title)
                                     Text(element.description)
@@ -66,8 +69,8 @@ struct HomeView: View {
                     Spacer()
                     HStack{
                         Spacer()
-                        NavigationLink(destination: {
-                            FormTaskView(task: nil)
+                        Button(action: {
+                            self.router.navigate(to: .formTask(task: nil))
                         }, label: {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
@@ -78,15 +81,13 @@ struct HomeView: View {
                         }).padding()
                     }
                 }
-            }.navigationDestination(isPresented: $isNavigateAddTask) {
-                FormTaskView(task: nil)
             }
-            
-            .toolbar(content: {
+            .navigationBarBackButtonHidden()
+            .toolbar {
                 ToolbarItem(placement: .topBarLeading, content: {
                     Text("Logout")
                 })
-            })
+           
         }
     }
 }

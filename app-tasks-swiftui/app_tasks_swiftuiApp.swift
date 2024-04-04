@@ -13,13 +13,25 @@ struct app_tasks_swiftuiApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $router.navPath){
-                LoginView().navigationDestination(for: Router.Destination.self, destination: {destination in
-                    switch(destination){
-                    case .
-                    }})
+                LoginView()
+                    .navigationDestination(for: Router.Destination.self){destination in
+                    switch destination {
+                    case .login:
+                        LoginView()
+                    case .home:
+                        HomeView()
+                    case .formTask(let task):
+                        FormTaskView(task: task)
+                    
+                   
+                    }
+                    
+                }
+            
+                
             }
-                .environmentObject(router)
-            ContentView()
-        }
+                
+            
+        }.environmentObject(router)
     }
 }

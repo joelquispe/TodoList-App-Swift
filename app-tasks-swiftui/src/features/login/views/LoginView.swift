@@ -13,13 +13,15 @@ struct LoginView: View {
     
     @State private var showToast = false
     
+    @EnvironmentObject var router:Router
+    
     private let toastOptions = SimpleToastOptions(
         hideAfter: 3
     )
     
     @State  private var isNavigateHome:Bool = false
     var body: some View {
-        NavigationStack{
+        
             VStack (spacing: 20){
                 Spacer().frame(height:50)
                 Image("logo").resizable().scaledToFit().frame(width:120,height: 120)
@@ -44,7 +46,7 @@ struct LoginView: View {
                         showToast.toggle()
                         return
                     }
-                    isNavigateHome = true
+                    self.router.navigate(to: .home)
                     print("Estas iniciando sesión")
                 }) {
                     Text("Iniciar sesión")
@@ -68,10 +70,8 @@ struct LoginView: View {
                     .foregroundColor(Color.white)
                     .cornerRadius(10)
                     .padding(.top)
-            }.navigationDestination(isPresented: $isNavigateHome){
-                HomeView()
             }
-        }.navigationBarBackButtonHidden(true)
+        
         
     }
 }

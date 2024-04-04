@@ -11,6 +11,7 @@ struct FormTaskView: View {
     var task : Task?
     private var taskViewModel = TaskViewModel()
     @Environment(\.dismiss) var dismiss;
+    @EnvironmentObject private var router: Router
     @State private var tfTitle = ""
     @State private var tfDescription = ""
     @State private var showToast = false
@@ -55,7 +56,7 @@ struct FormTaskView: View {
         }
     }
     var body: some View {
-        NavigationStack {
+       
             VStack{
                 VStack(alignment: .leading){
                     Text("Titulo")
@@ -90,19 +91,18 @@ struct FormTaskView: View {
                     tfDescription = self.task!.description
                 }
                 
-            }.navigationTitle(task != nil ? "Editar tarea" : "Crear tarea")
-                .navigationBarBackButtonHidden()
-                .toolbar(content: {
+            }
+            .navigationBarBackButtonHidden()
+            .navigationTitle(task != nil ? "Editar tarea" : "Crear tarea")
+                .toolbar {
                     ToolbarItem(placement: .topBarLeading, content: {
                         Text("Regresar")
                             .onTapGesture {
-                                self.dismiss()
+                                self.router.navigateBack()
                             }
                     })
                     
-                })
-        }
-        
+                }
     }
 }
 
